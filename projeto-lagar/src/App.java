@@ -7,17 +7,16 @@ public class App {
 
         // Relatorio relatorio = new Relatorio();
         // relatorio.gerar(caminhao);
-
         
-        System.out.println("FIM");
-        String pathArquivo = "src\\regras.txt";
-        LeitorStrategy leitor = new Leitor();
-       System.out.println( leitor.getData(pathArquivo));
-
-        // fazer um wait no Relatório e a Thread main notifyALl()
+        // Leitor leitor = new Leitor();
+        // System.out.println(leitor.getData());
+        // System.out.println(leitor.getQuantidadePlantacoes());
+        // System.out.println(leitor.getVariedadeEDist());
+        // System.out.println(leitor.getVariedadeEQtd());
+        // System.out.println(leitor.getQtdRecepcao());
+        // System.out.println(leitor.getCapacidadeTransCaminhao());
+        // System.out.println(leitor.getLimiteSupEsperaNoLagar());
     }
-
-
 }
 
 

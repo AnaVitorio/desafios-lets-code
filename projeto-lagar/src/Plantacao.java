@@ -1,5 +1,3 @@
-import java.util.Random;
-
 public class Plantacao extends Fazenda {
     private String nome;
     private boolean isOcupada = false;
@@ -37,6 +35,7 @@ public class Plantacao extends Fazenda {
             public void run() {
                 System.out.println("Carregando caminhão "+caminhao.getNome());
                 caminhao.setContador(caminhao.getContador()+1);
+                caminhao.setStatus(StatusCaminhao.CARREGADO);
                 try {
                     Thread.sleep(3000);    
                 } catch (InterruptedException e) {
@@ -47,8 +46,11 @@ public class Plantacao extends Fazenda {
             
         }.start();
 
-       
+        if(caminhao.getStatus().equals(StatusCaminhao.DESCARREGADO)){
+            notifyAll();
+        }
         transportarCaminhao(caminhao);
+        
     }
 
     private void transportarCaminhao(Caminhao caminhao) {
@@ -59,6 +61,7 @@ public class Plantacao extends Fazenda {
             public void run() {
                 System.out.println("Transportando caminhão "+caminhao.getNome());
                 caminhao.setContador(caminhao.getContador()+1);
+                caminhao.setStatus(StatusCaminhao.TRANSPORTADO);
                 try {
                     Thread.sleep(3000);    
                 } catch (InterruptedException e) {
@@ -69,9 +72,13 @@ public class Plantacao extends Fazenda {
             
         }.start();
 
-
+        if(caminhao.getStatus().equals(StatusCaminhao.DESCARREGADO)){
+            notifyAll();
+        }
+       
         Lagar lagar = new Lagar();
         lagar.adicionarCaminhaoNaFila(caminhao);
+        
         
     }
 

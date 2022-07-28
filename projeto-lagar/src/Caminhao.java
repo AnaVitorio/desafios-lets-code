@@ -2,7 +2,7 @@
 public class Caminhao {
     private String nome;
     private int contador = 0;
-
+    private StatusCaminhao status = StatusCaminhao.VAZIO;
 
     public Caminhao(String nome) {
         this.nome = nome;
@@ -21,6 +21,16 @@ public class Caminhao {
     public void setContador(int contador) {
         this.contador = contador;
     }
+
+    public StatusCaminhao getStatus() {
+        return status;
+    }
+
+
+    public void setStatus(StatusCaminhao status) {
+        this.status = status;
+    }
+
    
 
 }

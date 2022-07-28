@@ -19,9 +19,9 @@ public class Lagar extends Thread {
             public void run() {
                 System.out.println("Descarregando caminhão "+caminhao.getNome());
                 caminhao.setContador(caminhao.getContador()+1);
+                caminhao.setStatus(StatusCaminhao.DESCARREGADO);
                 try {
                     Thread.sleep(3000);   
-                    
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -37,6 +37,10 @@ public class Lagar extends Thread {
         // } catch (InterruptedException e) {
         //     e.printStackTrace();
         // }
+
+        if(caminhao.getStatus().equals(StatusCaminhao.DESCARREGADO)){
+            notifyAll();
+        }
         fila.poll();
         Relatorio relatorio = new Relatorio();
         relatorio.gerar(caminhao);
