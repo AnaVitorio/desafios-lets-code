@@ -1,7 +1,13 @@
 public class Plantacao extends Fazenda {
+
     private String nome;
     private boolean isOcupada = false;
-    // private Caminhao caminhao;
+    private Leitor leitor;
+
+    public Plantacao(Leitor leitor) {
+        super(leitor);
+        this.leitor = leitor;
+    }
 
     public String getNome() {
         return nome;
@@ -23,7 +29,7 @@ public class Plantacao extends Fazenda {
     public void iniciar(Fazenda fazenda){
         fazenda.getListaPlantacoes().stream()
                   .filter(plantacao -> plantacao.isOcupada == false)
-                  .forEach(plantacaoDesocupada -> plantacaoDesocupada.carregarCaminhao(new Caminhao(plantacaoDesocupada.getNome())));
+                  .forEach(plantacaoDesocupada -> plantacaoDesocupada.carregarCaminhao(new Caminhao(plantacaoDesocupada.getNome(), plantacaoDesocupada.leitor.getCapacidadeTransCaminhao())));
     }
 
     public void carregarCaminhao(Caminhao caminhao){

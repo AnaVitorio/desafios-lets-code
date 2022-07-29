@@ -1,26 +1,12 @@
 public class App {
     public static void main(String[] args) throws Exception {
         Leitor leitor = new Leitor();
-        Fazenda fazenda = new Fazenda();
+        Fazenda fazenda = new Fazenda(leitor);
         fazenda.adicionarPlantacoes(leitor.getQuantidadePlantacoes());
-        Plantacao plantacao = new Plantacao();
+        Plantacao plantacao = new Plantacao(leitor);
         plantacao.iniciar(fazenda);
 
-        // Relatorio relatorio = new Relatorio();
-        // relatorio.gerar(caminhao);
-        
-        
-        // System.out.println(leitor.getData());
-        // System.out.println(leitor.getQuantidadePlantacoes());
-        // System.out.println(leitor.getVariedadeEDist());
-        // System.out.println(leitor.getVariedadeEQtd());
-        // System.out.println(leitor.getQtdRecepcao());
-        // System.out.println(leitor.getCapacidadeTransCaminhao());
-        // System.out.println(leitor.getLimiteSupEsperaNoLagar());
     }
 }
 
 
-// não vou me importar com a ordem que eles está seguindo
-// o importe e que o relatório só seja gerado depois de todas as threads terem rodados
-// porque ai ele já vai ter todas as informações necessárias para calcular o tempo
