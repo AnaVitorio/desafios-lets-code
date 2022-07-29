@@ -37,23 +37,21 @@ public class Plantacao extends Fazenda {
                 caminhao.setContador(caminhao.getContador()+1);
                 caminhao.setStatus(StatusCaminhao.CARREGADO);
                 try {
-                    Thread.sleep(3000);    
+                    Thread.sleep(1000);    
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                transportarCaminhao(caminhao);
                 
             }
             
         }.start();
 
-        if(caminhao.getStatus().equals(StatusCaminhao.DESCARREGADO)){
-            notifyAll();
-        }
-        transportarCaminhao(caminhao);
+        
         
     }
 
-    private void transportarCaminhao(Caminhao caminhao) {
+    public void transportarCaminhao(Caminhao caminhao) {
         
         new Thread(caminhao.getNome()) {
 
@@ -63,21 +61,20 @@ public class Plantacao extends Fazenda {
                 caminhao.setContador(caminhao.getContador()+1);
                 caminhao.setStatus(StatusCaminhao.TRANSPORTADO);
                 try {
-                    Thread.sleep(3000);    
+                    Thread.sleep(1000);    
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                Lagar lagar = new Lagar();
+                lagar.adicionarCaminhaoNaFila(caminhao);
                 
             }
             
         }.start();
 
-        if(caminhao.getStatus().equals(StatusCaminhao.DESCARREGADO)){
-            notifyAll();
-        }
+
        
-        Lagar lagar = new Lagar();
-        lagar.adicionarCaminhaoNaFila(caminhao);
+       
         
         
     }

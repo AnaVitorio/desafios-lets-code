@@ -9,14 +9,7 @@ import java.util.stream.Stream;
 
 public class Leitor implements LeitorInterface{
 	private String pathArquivo = "src\\regras.txt";
-    // private String data;
-    // private int quantiPlantacos;
-    // private int quantiVariedades;
-    // private Map<String, Integer> variedadeEDits;
-    // private Map<String, Integer> variedadeEQtd;
-    // private int qtdRecepcao;
-	// private List<Integer> capacidadeTransCaminhao;
-	// private int limiteSupEsperaNoLagar;
+   
     @Override
     public String getData(){
         String regexData = "\\s+?\\d{2}\\/\\d{2}\\/\\d{4}";
