@@ -18,7 +18,6 @@ public class Lagar extends Thread {
             public void run() {
                 System.out.println("Descarregando caminhão "+caminhao.getNome());
                 caminhao.setContador(caminhao.getContador()+1);
-                caminhao.setStatus(StatusCaminhao.DESCARREGADO);
                 try {
                     Thread.sleep(1000);   
                 } catch (InterruptedException e) {

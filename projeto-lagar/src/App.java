@@ -1,14 +1,15 @@
 public class App {
     public static void main(String[] args) throws Exception {
+        Leitor leitor = new Leitor();
         Fazenda fazenda = new Fazenda();
-        fazenda.adicionarPlantacoes(3);
+        fazenda.adicionarPlantacoes(leitor.getQuantidadePlantacoes());
         Plantacao plantacao = new Plantacao();
         plantacao.iniciar(fazenda);
 
         // Relatorio relatorio = new Relatorio();
         // relatorio.gerar(caminhao);
         
-        // Leitor leitor = new Leitor();
+        
         // System.out.println(leitor.getData());
         // System.out.println(leitor.getQuantidadePlantacoes());
         // System.out.println(leitor.getVariedadeEDist());

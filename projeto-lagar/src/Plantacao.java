@@ -35,7 +35,6 @@ public class Plantacao extends Fazenda {
             public void run() {
                 System.out.println("Carregando caminhão "+caminhao.getNome());
                 caminhao.setContador(caminhao.getContador()+1);
-                caminhao.setStatus(StatusCaminhao.CARREGADO);
                 try {
                     Thread.sleep(1000);    
                 } catch (InterruptedException e) {
@@ -59,7 +58,6 @@ public class Plantacao extends Fazenda {
             public void run() {
                 System.out.println("Transportando caminhão "+caminhao.getNome());
                 caminhao.setContador(caminhao.getContador()+1);
-                caminhao.setStatus(StatusCaminhao.TRANSPORTADO);
                 try {
                     Thread.sleep(1000);    
                 } catch (InterruptedException e) {
