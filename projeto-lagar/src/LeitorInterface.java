@@ -11,6 +11,9 @@ public interface LeitorInterface {
     public List<Integer> getCapacidadeTransCaminhao();
     public int getLimiteSupEsperaNoLagar();
     public int getLimiteInfParaVoltarAOperar();
-    
+    public List<Integer> getCapacidadeDeCarga();
+    public List<Integer> getCapacidadeDeDescarga();
+    public List<Integer> getFatorMultiplicador();
+    public int getLimiteDeInterrupcaoDaCarga();
     
 }

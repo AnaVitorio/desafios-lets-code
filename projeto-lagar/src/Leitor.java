@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.MatchResult;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Leitor implements LeitorInterface{
@@ -14,44 +18,39 @@ public class Leitor implements LeitorInterface{
     public String getData(){
         String regexData = "\\s+?\\d{2}\\/\\d{2}\\/\\d{4}";
         List<String> listaLinhas = new ArrayList<>(); 
+       
         try (Stream<String> stream = Files.lines(Paths.get(pathArquivo))) {
-            stream.filter(linhaAtual -> linhaAtual.matches(regexData)).forEach(linha -> listaLinhas.add(linha.trim()));
+            stream.filter(linhaAtual -> linhaAtual.matches(regexData))
+                  .forEach(linha -> listaLinhas.add(linha.trim()));
+        
          } catch (IOException e) {
              e.printStackTrace();
          }
-        return listaLinhas.get(0).trim();
+
+        Pattern pattern = Pattern.compile("\\s+?\\d{2}\\/\\d{2}\\/\\d{4}");
+        Matcher matcher = pattern.matcher(listaLinhas.get(0));
+        matcher.find();
+        return listaLinhas.get(0);
+        
+        
     }
 
     @Override
     public int getQuantidadeVariedade(){
-        String regexQuantVariedade = "\\d.Variedades de Azeitonas:";
-        List<String> listaLinhas = new ArrayList<>(); 
-        int quantiVariedades = 0;
-        try (Stream<String> stream = Files.lines(Paths.get(pathArquivo))) {
-            stream.filter(linhaAtual -> linhaAtual.matches(regexQuantVariedade))
-                  .forEach(linha -> listaLinhas.add(linha));
-         } catch (IOException e) {
-             e.printStackTrace();
-         }
-
-        quantiVariedades = Integer.parseInt(Character.toString(listaLinhas.get(0).charAt(0)));
+        List<String> fraseCompativel = buscarPadrao("Variedades de Azeitonas:");
+        Pattern pattern = Pattern.compile("\\d+");
+        List<MatchResult> matcher = pattern.matcher(fraseCompativel.get(0)).results().collect(Collectors.toList());
+        int quantiVariedades = Integer.parseInt(matcher.get(0).group());        
         return quantiVariedades;
     }
 
     @Override
     public int getQuantidadePlantacoes(){
-        String regexQuantPlantacoes = "\\d.Plantações de Azeitonas:";
-        List<String> listaLinhas = new ArrayList<>(); 
-        int quantiPlantacos = 0;
-        try (Stream<String> stream = Files.lines(Paths.get(pathArquivo))) {
-            stream.filter(linhaAtual -> linhaAtual.matches(regexQuantPlantacoes))
-                  .forEach(linha -> listaLinhas.add(linha));
-         } catch (IOException e) {
-             e.printStackTrace();
-         }
-
-        quantiPlantacos = Integer.parseInt(Character.toString(listaLinhas.get(0).charAt(0)));
-        return quantiPlantacos;
+        List<String> fraseCompativel = buscarPadrao("Plantações de Azeitonas:");
+        Pattern pattern = Pattern.compile("\\d+");
+        List<MatchResult> matcher = pattern.matcher(fraseCompativel.get(0)).results().collect(Collectors.toList());
+        int quantiPlantacoes = Integer.parseInt(matcher.get(0).group());        
+        return quantiPlantacoes;
     }
 
     @Override
@@ -123,36 +122,89 @@ public class Leitor implements LeitorInterface{
     
     }
 
+    @Override
     public List<Integer> getCapacidadeTransCaminhao(){
-        List<String> listaLinhas = buscarPadrao("Varia entre");
         List<Integer> capacidadeTransCaminhao = new ArrayList<>();
-        String subString = listaLinhas.get(0).substring(listaLinhas.get(0).indexOf("até") - 3, listaLinhas.get(0).indexOf("até") + 7).trim();
-        String max = subString.substring(subString.indexOf("até")+3).trim();
-        String min = subString.substring(0, subString.indexOf("até")).trim();
-        capacidadeTransCaminhao.add(Integer.parseInt(min));
-        capacidadeTransCaminhao.add(Integer.parseInt(max));
-      
+        List<String> fraseCompativel = buscarPadrao("Varia entre");
+        Pattern pattern = Pattern.compile("\\d+");
+        List<MatchResult> matcher = pattern.matcher(fraseCompativel.get(0)).results().collect(Collectors.toList());
+        capacidadeTransCaminhao.add(Integer.parseInt(matcher.get(0).group()));
+        capacidadeTransCaminhao.add(Integer.parseInt(matcher.get(1).group()));
         return capacidadeTransCaminhao;
     }
 
     @Override
     public int getLimiteSupEsperaNoLagar(){
-        List<String> listaLinhas = buscarPadrao("Quando atingir");
-        String subString = listaLinhas.get(0).substring(14).trim();
-        String[] arraySubString = subString.split(" ");
-        int limiteSupEsperaNoLagar = Integer.parseInt(arraySubString[0].toString());
+        List<String> fraseCompativel = buscarPadrao("plantações param");
+        Pattern pattern = Pattern.compile("\\d+");
+        List<MatchResult> matcher = pattern.matcher(fraseCompativel.get(0)).results().collect(Collectors.toList());
+        int limiteSupEsperaNoLagar = Integer.parseInt(matcher.get(0).group());      
         return limiteSupEsperaNoLagar;
     }
 
 
     @Override
     public int getLimiteInfParaVoltarAOperar(){
-        List<String> listaLinhas = buscarPadrao("voltar atingir");
-        String subString = listaLinhas.get(0).substring(31).trim();
-        String[] arraySubString = subString.split(" ");
-        int limiteInfEsperaNoLagar = Integer.parseInt(arraySubString[0].toString());
-        return limiteInfEsperaNoLagar;
+        List<String> fraseCompativel = buscarPadrao("plantações podem enviar mais");
+        Pattern pattern = Pattern.compile("\\d+");
+        List<MatchResult> matcher = pattern.matcher(fraseCompativel.get(0)).results().collect(Collectors.toList());
+        int limiteInfParaVoltarAOperar = Integer.parseInt(matcher.get(0).group());      
+        return limiteInfParaVoltarAOperar;
     }
+
+    @Override
+    public List<Integer> getCapacidadeDeCarga(){
+        List<Integer> listaCapacidadeDeCarga = new ArrayList<>();
+        List<String> fraseCompativel = buscarPadrao("enche");
+        Pattern pattern = Pattern.compile("\\d+");
+        List<MatchResult> matcher = pattern.matcher(fraseCompativel.get(0)).results().collect(Collectors.toList());
+    
+        listaCapacidadeDeCarga.add(Integer.parseInt(matcher.get(0).group()));
+        listaCapacidadeDeCarga.add(Integer.parseInt(matcher.get(1).group()));
+
+        return listaCapacidadeDeCarga;
+    }
+
+    @Override
+    public List<Integer> getCapacidadeDeDescarga(){
+        List<Integer> listaCapacidadeDeDescarga = new ArrayList<>();
+        List<String> fraseCompativel = buscarPadrao("recepção ");
+        Pattern pattern = Pattern.compile("\\d+");
+        List<MatchResult> matcher = pattern.matcher(fraseCompativel.get(0)).results().collect(Collectors.toList());
+    
+        listaCapacidadeDeDescarga.add(Integer.parseInt(matcher.get(0).group()));
+        listaCapacidadeDeDescarga.add(Integer.parseInt(matcher.get(1).group()));
+
+
+        return listaCapacidadeDeDescarga;
+    }
+
+
+    @Override
+    public List<Integer> getFatorMultiplicador(){
+        List<Integer> listaFatorMultiplicador = new ArrayList<>();
+        List<String> fraseCompativel = buscarPadrao("corresponde a");
+        Pattern pattern = Pattern.compile("\\d+");
+        List<MatchResult> matcher = pattern.matcher(fraseCompativel.get(0)).results().collect(Collectors.toList());
+    
+        listaFatorMultiplicador.add(Integer.parseInt(matcher.get(0).group()));
+        listaFatorMultiplicador.add(Integer.parseInt(matcher.get(1).group()));
+
+
+        return listaFatorMultiplicador;
+    }
+
+
+    @Override
+    public int getLimiteDeInterrupcaoDaCarga(){
+        List<String> fraseCompativel = buscarPadrao("execução geral");
+        Pattern pattern = Pattern.compile("\\d+");
+        List<MatchResult> matcher = pattern.matcher(fraseCompativel.get(0)).results().collect(Collectors.toList());
+        int limiteDeInterrupcaoDaCarga = Integer.parseInt(matcher.get(0).group());      
+        return limiteDeInterrupcaoDaCarga;
+
+    }
+
 
     public List<String> buscarPadrao(String padrao){
         List<String> listaLinhas = new ArrayList<>(); 
