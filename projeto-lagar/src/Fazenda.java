@@ -1,9 +1,12 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Fazenda {
     private List<Plantacao> listaplantacoes = new ArrayList<>();
     private Leitor leitor;
+    protected boolean ativa = true;
+
 
     public Fazenda(Leitor leitor) {
         this.leitor = leitor;
@@ -12,11 +15,26 @@ public class Fazenda {
     public List<Plantacao> getListaPlantacoes() {
         return listaplantacoes;
     }
+    
+    public boolean isAtiva() {
+        return ativa;
+    }
 
-    public void adicionarPlantacoes(int numeroPlantacoes){
-        for(int i = 0; i < numeroPlantacoes; i++){
+    public void setAtiva(boolean ativa) {
+        this.ativa = ativa;
+    }
+
+    public void criarPlantacao(){
+        for (Map.Entry<String, Integer> item :leitor.getVariedadeEQtd().entrySet()) { 
+            adicionarPlantacao(item.getKey(), item.getValue());
+        }
+
+    }
+
+    public void adicionarPlantacao(String tipoPlantacao, int quantidade){
+        for(int i = 0; i < quantidade; i++){
             Plantacao plantacao = new Plantacao(leitor);
-            plantacao.setNome(Integer.toString(i));
+            plantacao.setTipoPlantacao(tipoPlantacao);
             listaplantacoes.add(plantacao);
 
         }

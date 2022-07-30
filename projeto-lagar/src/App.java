@@ -1,8 +1,10 @@
+import java.util.Map;
+
 public class App {
     public static void main(String[] args) throws Exception {
         Leitor leitor = new Leitor();
         Fazenda fazenda = new Fazenda(leitor);
-        fazenda.adicionarPlantacoes(leitor.getQuantidadePlantacoes());
+        fazenda.criarPlantacao();
         Plantacao plantacao = new Plantacao(leitor);
         plantacao.iniciar(fazenda);
       
@@ -11,7 +13,6 @@ public class App {
         // System.out.println(leitor.getData());
         // System.out.println(leitor.getQuantidadeVariedade());
         // System.out.println(leitor.getQuantidadePlantacoes());
-        // System.out.println(leitor.getVariedadeEQtd());
         // System.out.println(leitor.getVariedadeEDist());
         // System.out.println(leitor.getQtdRecepcao());
         // System.out.println(leitor.getCapacidadeDeCarga());
@@ -21,6 +22,10 @@ public class App {
         // System.out.println(leitor.getLimiteInfParaVoltarAOperar());
         // System.out.println(leitor.getCapacidadeTransCaminhao());
         // System.out.println(leitor.getLimiteDeInterrupcaoDaCarga());
+        // System.out.println(leitor.getVariedadeEQtd());
+
+        
+       
 
 
         

@@ -1,17 +1,18 @@
-import java.util.List;
-
-//Um timer no caminhão
 public class Caminhao {
     private String nome;
     private int contador = 0;
-    private List<Integer> capacidadeTransCaminhao;
+    private int carga;
+    private int tempoCarga; 
+    private int tempoDescarga;
 
-    public Caminhao(String nome, List<Integer> capacidadeTransCaminhao) {
+    public Caminhao(String nome, int carga, int tempoCarga, int tempoDescarga) {
         this.nome = nome;
-        this.capacidadeTransCaminhao = capacidadeTransCaminhao;
+        this.carga = carga;
+        this.tempoCarga = tempoCarga;
+        this.tempoDescarga = tempoDescarga;
     }
     
-    
+
     public String getNome() {
         return nome;
     }
@@ -25,10 +26,18 @@ public class Caminhao {
         this.contador = contador;
     }
 
-    public List<Integer> getCapacidadeTransCaminhao() {
-        return capacidadeTransCaminhao;
+    public int getCarga() {
+        return carga;
     }
 
 
+    public int getTempoCarga() {
+        return tempoCarga;
+    }
+
+
+    public int getTempoDescarga() {
+        return tempoDescarga;
+    }
 
 }
