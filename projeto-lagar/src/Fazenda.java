@@ -25,9 +25,10 @@ public class Fazenda {
     }
 
     public void criarPlantacao(){
-        for (Map.Entry<String, Integer> item :leitor.getVariedadeEQtd().entrySet()) { 
+        for (Map.Entry<String, Integer> item :leitor.getVariedadeEQtd().entrySet()) {
             adicionarPlantacao(item.getKey(), item.getValue());
-        }
+            adicionarDistancia();  
+        } 
 
     }
 
@@ -37,6 +38,18 @@ public class Fazenda {
             plantacao.setTipoPlantacao(tipoPlantacao);
             listaplantacoes.add(plantacao);
 
+        }
+        
+    }
+
+    public void adicionarDistancia(){
+        for (Plantacao plantacao : listaplantacoes) {
+            for (Map.Entry<String, Integer> item :leitor.getVariedadeEDist().entrySet()) {
+                 if(plantacao.getTipoPlantacao().equals(item.getKey())){
+                    plantacao.setDistanciaDoLagar(item.getValue());
+                 }
+            } 
+            
         }
     }
 

@@ -6,10 +6,7 @@ public class Plantacao extends Fazenda {
     private boolean isOcupada = false;
     private Leitor leitor;
     private Map<String, Integer> variedadeEDist;
-
-    public void setVariedadeEDist(Map<String, Integer> variedadeEDist) {
-        this.variedadeEDist = variedadeEDist;
-    }
+    private int distanciaDoLagar;
 
     public Plantacao(Leitor leitor) {
         super(leitor);
@@ -30,44 +27,56 @@ public class Plantacao extends Fazenda {
         this.isOcupada = isOcupada;
     }
 
-   
-
     public Map<String, Integer> getVariedadeEDist() {
         return variedadeEDist;
     }
 
-    // Assim que uma plantação for instanciada tem que ser atribuida a cada plantação um tipo;
-    // Galega
-    // Cordovil
-    // Picual
+    public void setVariedadeEDist(Map<String, Integer> variedadeEDist) {
+        this.variedadeEDist = variedadeEDist;
+    }
+
+    public int getDistanciaDoLagar() {
+        return distanciaDoLagar;
+    }
+
+    public void setDistanciaDoLagar(int distanciaDoLagar) {
+        this.distanciaDoLagar = distanciaDoLagar;
+    }
     
     public void iniciar(Fazenda fazenda){
-        //Talvez tudo isso tenha que ficar dentro de um while(true);
         // while(fazenda.isAtiva()){
         //     fazenda.getListaPlantacoes().stream()
         //           .filter(plantacao -> plantacao.isOcupada == false)
         //           .forEach(plantacaoDesocupada -> plantacaoDesocupada.carregarCaminhao(new Caminhao(plantacaoDesocupada.getNome(), plantacaoDesocupada.leitor.getCapacidadeTransCaminhao())));
 
         // }
-        int carga = GerarRandomico.randomico(this.leitor.getCapacidadeTransCaminhao().get(0), 
-                                            this.leitor.getCapacidadeTransCaminhao().get(1));
-
-        fazenda.getListaPlantacoes().stream()
-                  .filter(plantacao -> plantacao.isOcupada == false)
-                  .forEach(plantacaoDesocupada -> plantacaoDesocupada.carregarCaminhao(new Caminhao(plantacaoDesocupada.getTipoPlantacao(), carga, carga/2, carga/2)));
+        int limiteInferiorCarga = leitor.getCapacidadeTransCaminhao().get(0);
+        int limiteSuperiorCarga = leitor.getCapacidadeTransCaminhao().get(1);
+       
+        fazenda.getListaPlantacoes()
+            .stream()
+            .filter(plantacao -> plantacao.isOcupada == false)
+            .forEach(plantacaoDesocupada -> {
+                int carga = GerarRandomico.randomico(limiteInferiorCarga, limiteSuperiorCarga);
+                plantacaoDesocupada.carregarCaminhao(new Caminhao(carga, carga/2, carga/2
+                , plantacaoDesocupada.getDistanciaDoLagar()
+                ,plantacaoDesocupada.getTipoPlantacao()));
+            });
     }
 
     public void carregarCaminhao(Caminhao caminhao){
         //Ainda precisa ser verificada se a plantação está ocupada;
 
-        new Thread(caminhao.getNome()) {
+        new Thread(caminhao.getTipoCarga()) {
 
             @Override
             public void run() {
-                System.out.println("Carregando caminhão "+caminhao.getNome());
-                caminhao.setContador(caminhao.getContador()+1);
+                System.out.println("Carregando caminhão "+caminhao.getTipoCarga());
+                caminhao.setData(leitor.getData());
+                int tempoDeCarga = (caminhao.getCarga()*leitor.getFatorMultiplicador().get(0))/4;
+                caminhao.setContador(tempoDeCarga);
                 try {
-                    Thread.sleep(1000);    
+                    Thread.sleep(caminhao.getTempoCarga()*1000);    
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -84,16 +93,15 @@ public class Plantacao extends Fazenda {
 
     public void transportarCaminhao(Caminhao caminhao) {
         
-        new Thread(caminhao.getNome()) {
+        new Thread(caminhao.getTipoCarga()) {
 
             @Override
             public void run() {
-                System.out.println("Transportando caminhão "+caminhao.getNome());
-                caminhao.setContador(caminhao.getContador()+1);
-                //camminhao.getVariedadeEDist()
-                //Fazer um sleep de acordo com a distância
+                System.out.println("Transportando caminhão "+caminhao.getTempoCarga());
+                caminhao.setContador(caminhao.getContador()+(caminhao.getDistanciaDoLagar()*1000));
+                
                 try {
-                    Thread.sleep(1000);    
+                    Thread.sleep(caminhao.getDistanciaDoLagar()*1000);    
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -102,12 +110,7 @@ public class Plantacao extends Fazenda {
                 
             }
             
-        }.start();
-
-
-       
-       
-        
+        }.start();       
         
     }
 

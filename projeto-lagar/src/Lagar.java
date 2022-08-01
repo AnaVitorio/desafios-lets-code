@@ -2,8 +2,10 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class Lagar extends Fazenda{
+    private Leitor leitor;
     public Lagar(Leitor leitor) {
         super(leitor);
+        this.leitor = leitor;
     }
 
     Queue<Caminhao> fila = new LinkedList<>();
@@ -16,19 +18,20 @@ public class Lagar extends Fazenda{
             //Parar a produção das plantações
             // this.setAtiva(false);
         }
-        descarregaCaminhao(caminhao);
+        descarregaCaminhao(fila.poll());
     }
 
     public void descarregaCaminhao(Caminhao caminhao){
 
-        new Thread(caminhao.getNome()) {
+        new Thread(caminhao.getTipoCarga()) {
 
             @Override
             public void run() {
-                System.out.println("Descarregando caminhão "+caminhao.getNome());
-                caminhao.setContador(caminhao.getContador()+1);
+                System.out.println("Descarregando caminhão "+caminhao.getTipoCarga());
+                int tempoDeDescarga = (caminhao.getCarga()*leitor.getFatorMultiplicador().get(0))/4;
+                caminhao.setContador(caminhao.getContador()+tempoDeDescarga);
                 try {
-                    Thread.sleep(1000);   
+                    Thread.sleep(caminhao.getTempoDescarga()*1000);   
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -37,12 +40,7 @@ public class Lagar extends Fazenda{
             }
             
         }.start();
-        
-        fila.poll();
-        
-        
-        
-                
+                        
         
     }
 
