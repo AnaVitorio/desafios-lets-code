@@ -52,15 +52,22 @@ public class Plantacao extends Fazenda {
         // }
         int limiteInferiorCarga = leitor.getCapacidadeTransCaminhao().get(0);
         int limiteSuperiorCarga = leitor.getCapacidadeTransCaminhao().get(1);
+
+        
        
         fazenda.getListaPlantacoes()
             .stream()
             .filter(plantacao -> plantacao.isOcupada == false)
             .forEach(plantacaoDesocupada -> {
                 int carga = GerarRandomico.randomico(limiteInferiorCarga, limiteSuperiorCarga);
-                plantacaoDesocupada.carregarCaminhao(new Caminhao(carga, carga/2, carga/2
-                , plantacaoDesocupada.getDistanciaDoLagar()
-                ,plantacaoDesocupada.getTipoPlantacao()));
+                Caminhao caminhao = new Caminhao.CaminhaoBuilder()
+                                                    .carga(carga)
+                                                    .tempocarga(carga/2)
+                                                    .tempodescarga(carga/2)
+                                                    .distanciadolagar(plantacaoDesocupada.getDistanciaDoLagar())
+                                                    .tipoCarga(plantacaoDesocupada.getTipoPlantacao())
+                                                    .build();
+                plantacaoDesocupada.carregarCaminhao(caminhao);
             });
     }
 
@@ -97,7 +104,7 @@ public class Plantacao extends Fazenda {
 
             @Override
             public void run() {
-                System.out.println("Transportando caminhão "+caminhao.getTempoCarga());
+                System.out.println("Transportando caminhão "+caminhao.getTipoCarga());
                 caminhao.setContador(caminhao.getContador()+(caminhao.getDistanciaDoLagar()*1000));
                 
                 try {
